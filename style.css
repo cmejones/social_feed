@@ -1,0 +1,84 @@
+html {
+    margin:0;
+    padding: 0;
+}
+
+h1 {
+    margin: 1rem;
+}
+
+img {
+    max-width: 50vw;
+    width: 100vw;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
+.bottom {
+    margin-bottom:20px;
+}
+
+.flex-container {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column-reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    }
+
+.flex-item {
+    -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+    }
+
+button {
+    background: #104e44;
+    /* background-image: -webkit-linear-gradient(top, #896bed, #3381d4);
+    background-image: -moz-linear-gradient(top, #896bed, #3381d4);
+    background-image: -ms-linear-gradient(top, #896bed, #3381d4);
+    background-image: -o-linear-gradient(top, #896bed, #3381d4);
+    background-image: linear-gradient(to bottom, #896bed, #3381d4); */
+    -webkit-border-radius: 5;
+    -moz-border-radius: 5;
+    border-radius: 5px;
+    text-shadow: 1px 1px 3px #666666;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
+button:hover {
+    background: #507ef2;
+    background-image: -webkit-linear-gradient(top, #507ef2, #3498db);
+    background-image: -moz-linear-gradient(top, #507ef2, #3498db);
+    background-image: -ms-linear-gradient(top, #507ef2, #3498db);
+    background-image: -o-linear-gradient(top, #507ef2, #3498db);
+    background-image: linear-gradient(to bottom, #507ef2, #3498db);
+    text-decoration: none;
+}
+.hidden {
+    display:none;
+}

@@ -1,0 +1,72 @@
+var createFeed = function () {
+        // First step is to delete the existing feed and then recreate it.
+        container.innerHTML = "";
+        for (i=data.length-1; i >= 0; i--){
+            var post = document.createElement("div");
+            post.className = "post " + i;
+            post.style = "border-color: " + data[i].Color;
+            var row1 = document.createElement("div");
+            row1.className = "row inputRow";
+            var row2 = document.createElement("div");
+            row2.className = "row metaRow align-items-center";
+            var column3 = document.createElement("div");
+            column3.className = "col dateColumn";
+            var column4 = document.createElement("div");
+            column4.className = "col-2 buttonColumn";
+            var deleteButton = document.createElement("button");
+            deleteButton.id = "deleteButton " + i;
+            deleteButton.className = "btn btn-outline-danger btn-sm deleteButton";
+            deleteButton.innerHTML = "Delete";
+
+            deleteButton.onclick = function(){
+                // The ID of each delete button is "deleteButton 0", "deleteButton 1" etc where the integers refer to the
+                // post's information's location in the data array
+                // this.id.slice returns "0", "1", etc. 
+                // parseInt transfomrs "0" to 0 (String to integer)
+                var postPosition = parseInt(this.id.slice(13,14), 10);
+                // removes 1 element from the array at the postPosition
+                data.splice(postPosition, 1);
+                // need to recreate the feed after changing the data array
+                createFeed();
+            };
+
+
+            var postMeta = document.createElement("p");
+            postMeta.innerHTML = data[i].Date;
+            postMeta.className = "text-center italicDate";
+
+            // Only creates the div for an image if the post contains an image. Creates a col-3.
+            if (data[i].Image !== ""){
+                var column1 = document.createElement("div");
+                column1.className = "col-3 imgColumn";
+                var postImage = document.createElement("img");
+                postImage.src = data[i].Image;
+                postImage.className = "img-fluid img-thumbnail";
+                postImage.SameSite = "None";
+                column1.appendChild(postImage);
+                row1.appendChild(column1);
+            }
+            
+            // Only creates the div for text if the post contains text. Creates a col of undefined width
+            // So that if a post does not have an image, The text will take up the entire post
+            if(data[i].Text !== ""){
+                var column2 = document.createElement("div");
+                column2.className = "col textColumn";
+                var postText = document.createElement("p");
+                postText.innerHTML = data[i].Text;
+                postText.style = "color: " + data[i].Color;
+                column2.appendChild(postText);
+                row1.appendChild(column2);
+            }
+
+            column4.appendChild(deleteButton);
+            column3.appendChild(postMeta);
+            row2.appendChild(column3);
+            row2.appendChild(column4);
+            post.appendChild(row1);
+            post.appendChild(row2);
+            container.appendChild(post);
+        }        
+}
+
+createFeed();

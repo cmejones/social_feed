@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Profile Page</title>
+
+        <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer/">
+
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <!-- Custom styles for this template -->
+        <link href="./css/signin.css" rel="stylesheet">
+    </head>
+
+    <body class="text-center">
+        <form class="form-signin">
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            
+            <h1 class="h3 mb-3 font-weight-normal">Update Profile</h1>
+
+            <div id="errorMessage">
+
+            </div>
+
+            <label for="inputName" class="sr-only">Your Name</label>
+            <input type="text" id="inputName" class="form-control" required autofocus>
+            
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" required autofocus>
+            
+            <!-- <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required> -->
+
+            <label for="inputPicture" class="sr-only">Profile Picture</label>
+            <input type="text" id="inputPicture" class="form-control" placeholder="Profile Picture">          
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="submitUpdateProfile(event)">Update Profile</button>
+            <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
+        </form>
+    </body>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>    
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="./static/app.js"></script>
+<script src="./static/jquery.js"></script>
+<script type="text/javascript">
+    if(window.localStorage.getItem('user_id')) {
+        let id = window.localStorage.getItem('user_id');
+        let successCallback = function(response) {
+            // use response data to set .val() on input fields
+            let name_val = window.localStorage.getItem('name')  
+            let name_input = $('#inputName').val(response.name);
+            let email_input = $('#inputEmail').val(response.email);
+            let picture_input = $('#inputPicture').val(response.profilePicture);
+        }
+        let failureCallback = function(response) {
+            $('#errorMessage').html(response.responseText);
+        }
+        apiProfile(id, successCallback, failureCallback);
+
+    } else {
+        window.location = '/register';
+    }
+
+    function submitUpdateProfile(event) {
+        event.preventDefault() 
+        let name_input = $('#inputName').val();
+    
+        let email_input = $('#inputEmail').val();
+    
+        //let password_input = $('#inputPassword').val();
+
+        let picture_input = $('#inputPicture').val();
+
+        let data = {
+            name : name_input,
+            email : email_input,
+            //password: password_input,
+            profilePicture: picture_input
+        };
+        console.log(data, 'userdata');
+
+        let successCallback = function(response) {
+            // window.localStorage.setItem("user_id", response.id);
+            // window.localStorage.setItem("name", response.name);
+            window.location = '/';
+        }
+        let failureCallback = function(response) {
+            $('#errorMessage').html(response.responseText);
+        }
+        let id = window.localStorage.getItem('user_id');
+        apiProfileUpdate(id, data, successCallback, failureCallback);
+    };
+</script>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="style.css" rel="stylesheet">
+
+        <script src="https://use.fontawesome.com/fbe1287b4e.js"></script> 
+
+        <title>Stay Positive</title>
+    </head>
+
+
+    <body class="container-fluid">
+            <!-- Top Navigation -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-5">
+            <a class="navbar-brand" href="/">Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register">Register</a>
+                    </li>
+                    <li class="nav-item text-right">
+                        <a class="nav-link" href="profile">Update Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+    <br /><br />
+    <!--begin form  -->
+        <div class="text-center col" id="social">
+            <h1>Be Social, Stay Positive</h1>
+            <form>          
+                <div class="">
+                    <label for="imageCreate">Share an image of what makes you smile:<br />
+                    <input id="image_url" type="text" placeholder=" enter the url here"></label>
+                </div> 
+            
+                <div class="userText">
+                    <label for="userText">Why does this make you smile?<br />
+                    <textarea id="body"></textarea>
+                </div>
+
+                
+                <div class="">
+                    <button class="btn btn-success" onclick="submitPost(event)">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <hr />
+
+        <h1 class="text-center">Scroll for more smiles!</h1>
+
+    <div class="container">
+        <div class="row posts">
+        <div class="col" id="feed">
+            <ul>
+                <li id="commentsFeed"></li>
+            </ul>
+        </div>
+    </div>
+
+    </body>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+
+    <!-- <script src="./js/app.js"></script> -->
+    <script src="./static/app.js"></script>
+    <script src="./static/jquery.js"></script>
+    <!-- <script src="./js/jquery.js"></script> -->
+
+    <script type="text/javascript">
+
+    
+        function submitPost() {
+            console.log('submitting');
+
+            event.preventDefault() 
+
+            if(!window.localStorage.getItem('user_id')) {
+                alert("You must log in or register");
+                console.log('nobody logged in');
+            } else {
+                let content = $("#body").val();
+                let image = $("#image_url").val();
+
+                let data = {  
+                    user_id : window.localStorage.getItem("user_id"),
+                    body : content,
+                    image_url : image
+                };
+                console.log('data', data);
+                
+            var successInsert = function(response) { 
+                let item = createPostItem(data); //createPostItem defined in app.js
+                insertIntoFeed(item);
+                
+                //Empty the input fields for the user
+                $("#body").val('');
+                $("#image_url").val('')
+            };
+            
+            var errorInsert = function(xhr, error){
+                console.log(error);
+            }
+            apiInsertPost(data, successInsert, errorInsert);
+        }
+    }
+
+        function leaveComment() {
+            console.log('submitting comment');
+
+            event.preventDefault() 
+
+            if(!window.localStorage.getItem('user_id')) {
+                alert("You must log in or register to leave a comment");
+                console.log('nobody logged in');
+            } else {
+                
+                let comment = $("#comment").val();
+
+                //let post_id = $("#post_id").val();
+                //let post_id = $("#post_id").data('value');
+
+               // let comment_date= new Date().toISOString().slice(0,19).replace('T', ' ');
+
+                //let post_id = 1; //need to make dynamic with onclick save id in variable and 
+                //let post_id = this.posts.id;
+    
+                let data = {  
+                    user_id : window.localStorage.getItem('user_id'),
+                    comment : comment,
+                    post_id : post_id
+                };
+                console.log('comment data', data);
+                
+            var successCommentInsert = function(response) { 
+                let item = createCommentItem(data);
+                insertIntoCommentsFeed(item);
+                
+                //Empty the input fields for the user
+                $("#comment").val('');
+            };
+            
+            var errorInsert = function(xhr, error){
+                console.log(error);
+            }
+            apiInsertComment(data, successCommentInsert, errorInsert);
+        }
+    }
+
+        //Populate the feed with initial data
+        var successFunction = function(data){
+        
+            for(let i = 0; i< data.length; i++) {
+                let item = createPostItem(data[i]);
+                    insertIntoFeed(item);
+            }
+        };
+
+        var errorFunction = function(xhr, error) {
+            $('#errorMessage').html(response.responseText);
+        }
+
+        apiGetPosts(successFunction);
+
+        //Delete a post
+        // var successDelete = function(data){
+        
+        //     for(let i = 0; i< data.length; i++) {
+        //         let item = deletePostItem(data[i]);
+        //             deleteFromFeed(item);
+        //     }
+        // };
+
+        // var errorDelete = function(xhr, error) {
+        //     $('#errorMessage').html(response.responseText);
+        // }
+
+        // apiDeletePost(successDelete, errorDelete);        
+
+        </script>
+</html>
